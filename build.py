@@ -25,6 +25,10 @@ AD_SLOTS = {                                 # ad unit IDs from AdSense > Ads > 
     'home-top': '', 'home-mid': '',
     'article-top': '', 'article-mid': '', 'article-end': '', 'sidebar': '',
 }
+# In-feed ad: AdSense > Ads > By ad unit > In-feed ads. It sits in the article
+# lists dressed like one of the stories. Copy data-ad-slot and data-ad-layout-key
+# from the code Google gives you.
+IN_FEED = {'slot': '', 'layout_key': ''}
 GA4_ID = ''                                  # Google Analytics, e.g. 'G-XXXXXXX'
 NEWSLETTER_ENDPOINT = ''                     # sign-up form target, once an email service is chosen
 CONTACT_ENDPOINT    = ''                     # contact form target
@@ -67,6 +71,19 @@ def ad(slot, p, shape='wide'):
         return ''
     return ('<div class="ad ad-%s"><span class="ad-label">Advertisement</span>'
             '<div class="ad-box">Ad space &middot; Google AdSense</div></div>' % shape)
+
+def infeed():
+    """In-feed ad between stories in a list. Google labels it as an ad itself."""
+    if ADSENSE_CLIENT and IN_FEED['slot'] and IN_FEED['layout_key']:
+        return ('<div class="infeed"><ins class="adsbygoogle" style="display:block" data-ad-format="fluid" '
+                'data-ad-layout-key="%s" data-ad-client="%s" data-ad-slot="%s"></ins>'
+                '<script>(adsbygoogle=window.adsbygoogle||[]).push({});</script></div>'
+                % (IN_FEED['layout_key'], ADSENSE_CLIENT, IN_FEED['slot']))
+    if ADSENSE_CLIENT:
+        return ''
+    return ('<div class="infeed demo"><div class="row-txt"><span class="ad-label">Sponsored &middot; In-feed ad</span>'
+            '<p class="infeed-h">An advertiser\'s headline appears here, styled like the stories around it</p>'
+            '<p class="meta">Advertiser name</p></div><div class="ad-box">Ad image</div></div>')
 
 LOGO = ('<svg class="logo-mark" viewBox="0 0 40 32" aria-hidden="true">'
         '<rect x="0" y="2" width="30" height="7" rx="3.5" fill="#7ee0c3"/>'
@@ -175,6 +192,7 @@ def build_home(arts):
           <p class="ex">{esc(a['excerpt'])}</p><p class="meta">{nice_date(a['date'])} &middot; {a['minutes']} min read</p></div>
           <a class="thumb" href="{a['slug']}/"><img src="img/{a['image']}" alt="{esc(a['alt'])}" loading="lazy" width="1200" height="800"></a>
         </article>''')
+        if i in (1, 5): recent.append(infeed())
         if i == 3: recent.append(ad('home-mid', p))
     tabs = '<a class="on" href="./">All</a>' + ''.join(
         '<a href="category/%s/">%s</a>' % (slugify(c), esc(c)) for c in CATEGORIES)
@@ -249,11 +267,13 @@ def build_article(a, arts):
 def build_category(c, arts):
     p = '../../'
     items = [a for a in arts if a['category'] == c]
-    rows = ''.join(f'''<article class="row">
+    rows = [f'''<article class="row">
       <div class="row-txt"><h3><a href="{p}{a['slug']}/">{esc(a['title'])}</a></h3>
       <p class="ex">{esc(a['excerpt'])}</p><p class="meta">{nice_date(a['date'])} &middot; {a['minutes']} min read</p></div>
       <a class="thumb" href="{p}{a['slug']}/"><img src="{p}img/{a['image']}" alt="{esc(a['alt'])}" loading="lazy" width="1200" height="800"></a>
-    </article>''' for a in items)
+    </article>''' for a in items]
+    if len(rows) > 2: rows.insert(2, infeed())
+    rows = ''.join(rows)
     body = f'''<section class="dark cat-head"><div class="wrap"><span class="kicker light">Topic</span><h1>{esc(c)}</h1>
 <p>{len(items)} guide{'s' if len(items) != 1 else ''}</p></div></section>
 <section class="wrap recent">{rows}{ad('home-mid', p)}</section>'''
