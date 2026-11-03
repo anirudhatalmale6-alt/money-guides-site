@@ -1,4 +1,4 @@
-# Pocketwise (working name)
+# The Wise Dollar (thewisedollar.com)
 
 Article site in the style of an AdSense-supported news/guide site.
 

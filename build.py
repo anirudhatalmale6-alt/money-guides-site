@@ -13,9 +13,9 @@ import datetime, html, json, math, os, re, shutil
 import markdown
 
 # ------------------------------------------------------------------ settings
-SITE_NAME   = 'Pocketwise'                   # placeholder until the domain is chosen
+SITE_NAME   = 'The Wise Dollar'
 TAGLINE     = 'Money help for real life'
-DOMAIN      = ''                             # e.g. 'pocketwise.com' (no https://)
+DOMAIN      = ''                             # 'thewisedollar.com' once DNS points at GitHub Pages
 DEMO        = True                           # True = tells search engines not to index it yet
 
 # Google AdSense. Leave ADSENSE_CLIENT empty and the page shows grey boxes where
@@ -214,7 +214,7 @@ def build_home(arts):
 
 def newsletter_band(p):
     return f'''<section class="news-band"><div class="wrap news-in">
-  <div><h2>Get the weekly money dig</h2><p>One email a week with new guides, deadlines for assistance programs and ways to save. No spam, unsubscribe any time.</p></div>
+  <div><h2>Get The Wise Dollar weekly</h2><p>One email a week with new guides, deadlines for assistance programs and ways to save. No spam, unsubscribe any time.</p></div>
   <form class="news-form" onsubmit="return subscribe(this)">
     <input type="email" name="email" required placeholder="Your email address" aria-label="Email address">
     <button type="submit">Subscribe</button>
