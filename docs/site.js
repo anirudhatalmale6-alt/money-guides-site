@@ -6,7 +6,7 @@ function openSearch(){
   document.getElementById('search').hidden=false;
   var q=document.getElementById('q');q.value='';q.focus();
   document.getElementById('results').innerHTML='';
-  if(!IDX) fetch(ROOT+'search.json').then(function(r){return r.json()}).then(function(d){IDX=d});
+  if(!IDX) fetch(ROOT+'search.json').then(function(r){return r.json()}).then(function(d){IDX=d;runSearch(document.getElementById('q').value)});
 }
 function closeSearch(){document.getElementById('search').hidden=true}
 function runSearch(v){
