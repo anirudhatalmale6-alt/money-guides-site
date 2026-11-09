@@ -15,7 +15,7 @@ import markdown
 # ------------------------------------------------------------------ settings
 SITE_NAME   = 'The Wise Dollar'
 TAGLINE     = 'Money help for real life'
-DOMAIN      = ''                             # 'thewisedollar.com' once DNS points at GitHub Pages
+DOMAIN      = 'thewisedollar.com'              # no https://
 DEMO        = True                           # True = tells search engines not to index it yet
 
 # Google AdSense. Leave ADSENSE_CLIENT empty and the page shows grey boxes where
